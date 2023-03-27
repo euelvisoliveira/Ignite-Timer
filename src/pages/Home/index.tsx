@@ -25,14 +25,21 @@ const newCycleFormsValidationSchema = zod.object({
     .max(60, ' o ciclo precisa ser de no máximo 60 minutos'),
 })
 
+type NewCycleFormData = zod.infer<typeof newCycleFormsValidationSchema>
+
 export function Home() {
-  const { register, handleSubmit, watch } = useForm({
+  const { register, handleSubmit, watch, reset } = useForm<NewCycleFormData>({
     resolver: zodResolver(newCycleFormsValidationSchema),
+    defaultValues: {
+      task: '',
+      minutesAmount: 0,
+    },
   })
   // dentro do zodResolver eu preciso passar qual e o p meu schema de validacao(forma que eu quero validar os dados do input)
 
-  function handleCreateNewCycle(data: any) {
+  function handleCreateNewCycle(data: NewCycleFormData) {
     console.log(data)
+    reset()
   }
 
   const task = watch('task')
